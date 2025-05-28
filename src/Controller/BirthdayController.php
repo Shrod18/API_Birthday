@@ -36,7 +36,7 @@ class BirthdayController extends AbstractController
 
         $birthday->setTitle($data['title']);
         $birthday->setDate(new \DateTimeImmutable($data['date']));
-        $birthday->setUser($user); 
+        $birthday->setUser($user);
 
         $entityManager->persist($birthday);
         $entityManager->flush();
@@ -49,21 +49,21 @@ class BirthdayController extends AbstractController
      */
     public function read(int $id, BirthdayRepository $repo): JsonResponse
     {
-    $birthday = $repo->find($id);
+        $birthday = $repo->find($id);
 
-    if (!$birthday) {
-        return new JsonResponse(['error' => 'Anniversaire introuvable'], 404);
-    }
+        if (!$birthday) {
+            return new JsonResponse(['error' => 'Anniversaire introuvable'], 404);
+        }
 
-    return new JsonResponse([
-        'id' => $birthday->getId(),
-        'title' => $birthday->getTitle(),
-        'date' => $birthday->getDate()->format('Y-m-d'),
-        'user' => [
-            'id' => $birthday->getUser()->getId(),
-            'email' => $birthday->getUser()->getEmail(),
-        ]
-    ]);
+        return new JsonResponse([
+            'id' => $birthday->getId(),
+            'title' => $birthday->getTitle(),
+            'date' => $birthday->getDate()->format('Y-m-d'),
+            'user' => [
+                'id' => $birthday->getUser()->getId(),
+                'email' => $birthday->getUser()->getEmail(),
+            ]
+        ]);
     }
 
     /**
