@@ -7,6 +7,7 @@ use App\Form\UserType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,21 +17,32 @@ class UserController extends AbstractController
     /**
      * @Route("/user", name="app_user_index", methods={"GET"})
      */
-    public function index(EntityManagerInterface $entityManager): JsonResponse
+    public function index(UserRepository $userRepository): JsonResponse
     {
-        $users = $entityManager->getRepository(User::class)->findAll();
+    $users = $userRepository->findAll();
 
-        $data = [];
-        foreach ($users as $user) {
-            $data[] = [
-                'id' => $user->getId(),
-                'email' => $user->getEmail(),
-                'password' => $user->getPassword(),
-                'birthday' => $user->getBirthday()->format('Y-m-d'),
+    $data = [];
+
+    foreach ($users as $user) {
+        $birthdays = [];
+
+        // 👇 Utilise bien getBirthdays() (avec un "s")
+        foreach ($user->getBirthdays() as $birthday) {
+            $birthdays[] = [
+                'id' => $birthday->getId(),
+                'title' => $birthday->getTitle(),
+                'date' => $birthday->getDate()->format('Y-m-d'),
             ];
         }
 
-        return $this->json($data);
+        $data[] = [
+            'id' => $user->getId(),
+            'email' => $user->getEmail(),
+            'birthdays' => $birthdays,
+        ];
+    }
+
+    return new JsonResponse($data, 200);
     }
 
     /**
