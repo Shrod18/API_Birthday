@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Birthday;
 use App\Repository\BirthdayRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -24,14 +25,18 @@ class BirthdayController extends AbstractController
     /**
      * @Route("/birthday", name="app_birthday_create", methods={"POST"})
      */
-    public function create(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    public function create(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepo): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
+        $user = $userRepo->find($data['id']); // l'ID de l'utilisateur
+
+
         $birthday = new Birthday();
-        
+
         $birthday->setTitle($data['title']);
         $birthday->setDate(new \DateTimeImmutable($data['date']));
+        $birthday->setUser($user); 
 
         $entityManager->persist($birthday);
         $entityManager->flush();
@@ -44,6 +49,7 @@ class BirthdayController extends AbstractController
      */
     public function read(Birthday $birthday): JsonResponse
     {
+        
         return $this->json($birthday);
     }
 
