@@ -29,6 +29,7 @@ class BirthdayController extends AbstractController
         $data = json_decode($request->getContent(), true);
 
         $birthday = new Birthday();
+        
         $birthday->setTitle($data['title']);
         $birthday->setDate(new \DateTimeImmutable($data['date']));
 
