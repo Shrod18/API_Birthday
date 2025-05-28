@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"email\" : \"ahhhh@gmail.com\",\r\n    \"password\" : \"215454\"\r\n}",
+					"raw": "{\r\n    \"email\" : \"bb@gmail.com\",\r\n    \"password\" : \"215454\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -21,10 +21,13 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8000/user",
+					"raw": "http://127.0.0.1:8000/user",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"127",
+						"0",
+						"0",
+						"1"
 					],
 					"port": "8000",
 					"path": [
