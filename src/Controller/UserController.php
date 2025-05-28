@@ -76,9 +76,11 @@ class UserController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-        $user->setName($data['name']);
+        // $user->setName($data['name']);
         $user->setEmail($data['email']);
-        $user->setBirthday(new \DateTime($data['birthday']));
+        $user->setPassword($data['password'] ?? $user->getPassword());
+        $user->setRoles($data['roles'] ?? $user->getRoles());
+        // $user->setBirthday(new \DateTime($data['birthday']));
 
         $entityManager->flush();
 
