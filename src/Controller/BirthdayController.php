@@ -47,10 +47,23 @@ class BirthdayController extends AbstractController
     /**
      * @Route("/birthday/{id}", name="app_birthday_read", methods={"GET"})
      */
-    public function read(Birthday $birthday): JsonResponse
+    public function read(int $id, BirthdayRepository $repo): JsonResponse
     {
-        
-        return $this->json($birthday);
+    $birthday = $repo->find($id);
+
+    if (!$birthday) {
+        return new JsonResponse(['error' => 'Anniversaire introuvable'], 404);
+    }
+
+    return new JsonResponse([
+        'id' => $birthday->getId(),
+        'title' => $birthday->getTitle(),
+        'date' => $birthday->getDate()->format('Y-m-d'),
+        'user' => [
+            'id' => $birthday->getUser()->getId(),
+            'email' => $birthday->getUser()->getEmail(),
+        ]
+    ]);
     }
 
     /**
