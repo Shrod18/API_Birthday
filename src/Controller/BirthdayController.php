@@ -16,10 +16,25 @@ class BirthdayController extends AbstractController
     /**
      * @Route("/birthday", name="app_birthday_list", methods={"GET"})
      */
-    public function list(BirthdayRepository $birthdayRepository): JsonResponse
+    public function list(BirthdayRepository $repo): JsonResponse
     {
-        $birthdays = $birthdayRepository->findAll();
-        return $this->json($birthdays);
+    $birthdays = $repo->findAll();
+
+    $data = [];
+
+    foreach ($birthdays as $birthday) {
+        $data[] = [
+            'id' => $birthday->getId(),
+            'title' => $birthday->getTitle(),
+            'date' => $birthday->getDate()->format('Y-m-d'),
+            'user' => [
+                'id' => $birthday->getUser()->getId(),
+                'email' => $birthday->getUser()->getEmail(),
+            ]
+        ];
+    }
+
+    return new JsonResponse($data, 200);
     }
 
     /**
