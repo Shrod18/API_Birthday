@@ -41,7 +41,6 @@ class UserController extends AbstractController
         $data = json_decode($request->getContent(), true);
 
         $user = new User();
-        $user->setName($data['name']);
         $user->setEmail($data['email']);
         $user->setBirthday(new \DateTime($data['birthday']));
 
